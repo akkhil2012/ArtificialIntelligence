@@ -7,3 +7,38 @@ RAG Basics:
 https://www.youtube.com/watch?v=ea2W8IogX80&t=1972s
 Basic RAG
 Advanced RAG
+
+
+MCP case 2:
+——
+1. Integrate with Cursor:
+https://github.com/yeakub108/mcp-server
+
+
+curl https://api.openai.com/v1/models \
+
+
+
+
+
+
+
+CHECK if the  chat window in cursor is example of prompt engineering OR MCP??
+Next step:
+ Build ur own MCP server.
+MCP: https://github.com/yeakub108/mcp-server/tree/main/src
+For Demo
+Current Sample:
+https://github.com/yeakub108/mcp-server/blob/main/src/tools/fileReader.ts
+
+Machine  learning Demos:
+https://github.com/ed-donner/agents/tree/main
+https://github.com/pdichone
+
+RAG:
+1. https://www.youtube.com/watch?v=ea2W8IogX80&t=1972s
+  Repo:
+  Basic:   https://github.com/pdichone/rag-intro-chat-with-docs
+ Advanced: https://github.com/pdichone/advanced-rag-techniques/tree/main
+
+including LLMs, Agent Frameworks like LangGraph & Google ADK, etc., Coding Agents like Cursor & Windsurf, etc.
