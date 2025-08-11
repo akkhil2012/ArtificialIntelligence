@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Error Resolution System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="container">
+                <h1>🔍 AI-Powered Error Resolution System</h1>
+                <p>Intelligent search across enterprise knowledge sources</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="app-layout">
+                    <!-- Sidebar -->
+                    <aside class="sidebar">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Configuration</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <label class="form-label">Search Sources</label>
+                                    <div class="source-list">
+                                        <div class="source-item">
+                                            <span class="status status--success"></span>
+                                            Confluence
+                                        </div>
+                                        <div class="source-item">
+                                            <span class="status status--success"></span>
+                                            Teams
+                                        </div>
+                                        <div class="source-item">
+                                            <span class="status status--success"></span>
+                                            Outlook
+                                        </div>
+                                        <div class="source-item">
+                                            <span class="status status--success"></span>
+                                            Local Disk
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Search History</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="search-history" class="search-history">
+                                    <p class="text-secondary">No previous searches</p>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Main Content Area -->
+                    <div class="content-area">
+                        <!-- Input Form Section -->
+                        <section class="form-section">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h2>Error Details</h2>
+                                    <p>Enter the error information to find relevant resolutions</p>
+                                </div>
+                                <div class="card__body">
+                                    <form id="error-form" class="error-form">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label class="form-label" for="severity">Error Severity Level *</label>
+                                                <select id="severity" class="form-control" required>
+                                                    <option value="">Select severity</option>
+                                                    <option value="P1">P1 - Critical</option>
+                                                    <option value="P2">P2 - High</option>
+                                                    <option value="P3">P3 - Medium</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" for="error-code">Error Code</label>
+                                                <input type="text" id="error-code" class="form-control" placeholder="e.g., ERR_CONNECTION_TIMEOUT">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label" for="error-description">Error Description *</label>
+                                            <textarea id="error-description" class="form-control" rows="3" required 
+                                                placeholder="Describe the error in detail..."></textarea>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label class="form-label" for="app-name">Application Name</label>
+                                                <input type="text" id="app-name" class="form-control" placeholder="e.g., UserPortal">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" for="environment">Environment *</label>
+                                                <select id="environment" class="form-control" required>
+                                                    <option value="">Select environment</option>
+                                                    <option value="Dev">Development</option>
+                                                    <option value="Test">Testing</option>
+                                                    <option value="Prod">Production</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label" for="applicable-pool">Applicable Pool</label>
+                                            <input type="text" id="applicable-pool" class="form-control" placeholder="e.g., Web Servers Pool A">
+                                        </div>
+
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn btn--primary">
+                                                <span class="btn-text">Search for Solutions</span>
+                                                <span class="btn-loading hidden">Searching...</span>
+                                            </button>
+                                            <button type="button" id="clear-form" class="btn btn--outline">Clear Form</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Query Expansion Section -->
+                        <section id="query-expansion-section" class="expansion-section hidden">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>🧠 AI Query Expansion</h3>
+                                </div>
+                                <div class="card__body">
+                                    <div class="expansion-content">
+                                        <div class="expansion-item">
+                                            <h4>Original Query</h4>
+                                            <div id="original-query" class="query-box"></div>
+                                        </div>
+                                        <div class="expansion-item">
+                                            <h4>Expanded Search Terms</h4>
+                                            <div id="expanded-query" class="query-box"></div>
+                                        </div>
+                                        <div class="expansion-item">
+                                            <h4>Generated Keywords</h4>
+                                            <div id="generated-keywords" class="keywords-container"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Topological Graph Section -->
+                        <section id="graph-section" class="graph-section hidden">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>🔄 Search Workflow</h3>
+                                    <div class="progress-container">
+                                        <div id="search-progress" class="progress-bar">
+                                            <div class="progress-fill"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card__body">
+                                    <div id="workflow-graph" class="graph-container"></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Results Section -->
+                        <section id="results-section" class="results-section hidden">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>📋 Search Results</h3>
+                                    <div class="results-summary">
+                                        <span id="results-count">0 results found</span>
+                                    </div>
+                                </div>
+                                <div class="card__body">
+                                    <!-- Top 3 Recommendations -->
+                                    <div class="recommendations">
+                                        <h4>🏆 Top 3 Recommended Solutions</h4>
+                                        <div id="top-recommendations" class="recommendations-grid"></div>
+                                    </div>
+
+                                    <!-- All Results by Source -->
+                                    <div class="all-results">
+                                        <h4>📚 All Results by Source</h4>
+                                        <div id="results-by-source" class="results-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Export Section -->
+                        <section id="export-section" class="export-section hidden">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>📄 Export Results</h3>
+                                </div>
+                                <div class="card__body">
+                                    <div class="export-options">
+                                        <button id="export-pdf" class="btn btn--primary">
+                                            Export to PDF
+                                        </button>
+                                        <button id="save-search" class="btn btn--outline">
+                                            Save Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Modal -->
+        <div id="loading-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="loading-spinner"></div>
+                <p>Searching across knowledge sources...</p>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>✅ Search Complete</h3>
+                <p>Found solutions from multiple sources. Check the results below.</p>
+                <button class="btn btn--primary" onclick="closeModal('success-modal')">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
