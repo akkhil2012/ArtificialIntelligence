@@ -1,0 +1,23 @@
+1.For Defining UI for Splunk logs agregation:
+------------------------
+A dropDown with named SubDomain
+  It should have following options:
+     RelAPG, IdentityAPG, PreferenceAPG
+
+On Selection of the Particular SubDomain It should Option a new Modal Window with a predefined topological Graph.
+   The Nodes in the topological graph Should have 3 Nodes by default.
+   Each Node Click should open a prompt;
+   Prompt should have Title named: Features to determine anomalies
+   User should be allowed to select one or more features from the dropdown
+   The Primary dropdown should have following options:
+     ResponseTime
+     Client
+     ErrorCode
+     ErrorMessage
+   On selection of either feature from above dropdown should Open Secondary Dropdown for each of above Option should have another dropDown with following options:
+     0.01, 0.05,0.10,0.20
+   There should be a Button called trigger on click of which the topological graph should get triggered.
+   Each Node should send the values selected from the options selected from above primary and secondary dropdown to method written 
+   In same python file that sends response as count of anomaly and values for the options selected from primary dropdown
+   The Corresponding node should have option to download the response as pdf file.
+   There should be option for End User to either continue the topological graph flow wherein net node would be triggered else the flow should be aborted.
